@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue"
-import { ethers } from "ethers"
+import { onMounted, ref, watch } from "vue"
 import { displayEther, useEthers } from 'vue-dapp'
 import useKuponFactory from "../hooks/useKuponFactory" 
 import useNetworkData from "../hooks/useNetworkData" 
@@ -14,11 +13,21 @@ const { isNetworkSupported, supportedNetworkName } = useNetworkData()
 const nftContractAddresses = ref([])
 
 // ON CREATE
-onMounted(async () => {
+onMounted(() => {
+  fetchNftAddresses()
+});
+
+// METHODS
+async function fetchNftAddresses() {
   if (userAddress.value) {
     nftContractAddresses.value = await factoryContract().getNftsByIssuer(userAddress.value)
   }
-});
+}
+
+// WATCHERS
+watch(userAddress, function () {
+  fetchNftAddresses()
+})
 </script>
 
 <template>
