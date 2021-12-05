@@ -4,6 +4,6 @@
 
 <template>
   <div class="text-center">
-    <h1>Kupon Protocol</h1>
+    <h1>Create NFT</h1>
   </div>
 </template>

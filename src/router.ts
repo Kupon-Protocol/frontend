@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Home from './views/Home.vue'
 import About from './views/About.vue'
+import CreateNft from './views/CreateNft.vue'
 import Profile from './views/Profile.vue'
 
 // For info on using Vue Router with the Composition API, see https://next.router.vuejs.org/guide/advanced/composition-api.html
@@ -15,6 +16,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/about',
     name: 'About',
     component: About,
+  },
+  {
+    path: '/create',
+    name: 'CreateNft',
+    component: CreateNft,
   },
   {
     path: '/profile',

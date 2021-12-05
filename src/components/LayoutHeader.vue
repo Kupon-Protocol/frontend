@@ -1,8 +1,25 @@
 <script setup lang="ts">
-import { useBoard, useEthers, shortenAddress } from 'vue-dapp'
+import { watch } from "vue";
+import { useBoard, useEthers, useWallet, shortenAddress } from 'vue-dapp'
+import { useRouter } from 'vue-router'
 
 const { open } = useBoard()
 const { address, isActivated } = useEthers()
+const { walletName } = useWallet()
+const router = useRouter()
+
+// METHODS
+function goToCreateNft() {
+  router.push({name: 'CreateNft'})
+}
+
+// WATCH
+watch(isActivated, (val: any) => {
+  // store to local storage in order to enable automated connection on the next visit
+  if (val && walletName.value == "metamask") {
+    localStorage.setItem("connected", "metamask");
+  }
+})
 
 </script>
 
@@ -33,6 +50,7 @@ const { address, isActivated } = useEthers()
         <div class="d-flex">
 
           <button v-if="isActivated" class="btn btn-outline-success">{{ shortenAddress(address) }}</button>
+          <button v-if="isActivated" @click="goToCreateNft" class="btn btn-outline-success">Create NFT</button>
           <button v-else @click="open" class="btn btn-outline-success">Connect Wallet</button>
 
         </div>
