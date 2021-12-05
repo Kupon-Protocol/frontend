@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted } from "vue"
 import LayoutHeader from './components/LayoutHeader.vue'
+import Footer from './components/Footer.vue'
 import { useEthers, useWallet } from 'vue-dapp'
 
 const { connect } = useWallet()
@@ -20,6 +21,8 @@ onMounted(() => {
   <div class="container mt-3">
     <router-view></router-view>
   </div>
+
+  <Footer />
   
   <vdapp-board />
 </template>

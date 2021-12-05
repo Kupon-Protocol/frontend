@@ -6,19 +6,15 @@ export default function useNetworkData() {
 
   // COMPUTED
   const supportedNetworkName = computed(function() {
-    if (chainId.value == 1) {
-      return "Ethereum"
-    } else if (chainId.value == 137) {
-      return "Polygon"
+    if (chainId.value == 80001) {
+      return "Mumbai Testnet"
     }
 
     return "Unsupported network"
   })
 
   const isNetworkSupported = computed(function() {
-    if (chainId.value == 1) {
-      return true
-    } else if (chainId.value == 137) {
+    if (chainId.value == 80001) { // mumbai testnet
       return true
     }
 

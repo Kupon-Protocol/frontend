@@ -3,7 +3,7 @@ import { displayEther, useEthers } from 'vue-dapp'
 import useKuponFactory from "../hooks/useKuponFactory" 
 import useNetworkData from "../hooks/useNetworkData" 
 
-const { address: userAddress, balance, chainId, isActivated } = useEthers()
+const { address: userAddress, balance, isActivated } = useEthers()
 const { address: factoryAddress } = useKuponFactory()
 const { isNetworkSupported, supportedNetworkName } = useNetworkData()
 

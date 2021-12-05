@@ -6,11 +6,11 @@ export default function useKuponFactory() {
 
   // COMPUTED
   const address = computed(function() {
-    if (chainId.value == 1) {
-      return "0x123"
+    if (chainId.value == 80001) { // Mumbai testnet
+      return "0xeA2f99fE93E5D07F61334C5Eb9c54c5D5C957a6a"
     }
 
-    return "0x456"
+    return "0xNone"
   })
 
   // RETURN
