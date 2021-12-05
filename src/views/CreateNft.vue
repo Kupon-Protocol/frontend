@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref } from "vue"
+import { ethers } from "ethers"
 import useKuponFactory from "../hooks/useKuponFactory" 
 import useNetworkData from "../hooks/useNetworkData" 
 
-const { address: factoryAddress } = useKuponFactory()
+const { contract: factoryContract } = useKuponFactory()
 const { isNetworkSupported } = useNetworkData()
 
 // DATA
@@ -35,6 +36,43 @@ const isFormValid = computed(function() {
 
   return { status: true, message: "Form is valid"}
 })
+
+// METHODS
+function issueNft() {
+  console.log("issue nft")
+
+  try {
+    factoryContract().createKuponNft(
+      nftName.value, 
+      'SYMBOL',
+      nftDescription.value,
+      nftImage.value,
+      ethers.BigNumber.from(nftMaxSupply.value), 
+      ethers.utils.parseEther(String(nftPrice.value))
+    ).then((tx: any) => {
+      return tx.wait().then((receipt: any) => {
+        console.log("receipt status: " + receipt.status)
+        console.log(receipt)
+
+        if (receipt.status == 1) {
+          console.log("Success")
+        } else {
+          console.log("Failed")
+        }
+
+        return true;
+      }, (error: any) => {
+        return error.checkCall().then((error: any) => {
+          console.log("Error message:", error)
+          return false
+        });
+      }
+    )});
+  
+  } catch(e) {
+    console.log(e)
+  }
+}
 
 </script>
 
@@ -77,7 +115,8 @@ const isFormValid = computed(function() {
           class="form-control" id="nftPrice">
       </div>
 
-      <button type="submit" class="btn btn-primary" :disabled="!isFormValid.status">Submit</button>
+      <button type="submit" @click="issueNft" class="btn btn-primary" :disabled="!isFormValid.status">Submit</button>
+
       <br>
       <small v-if="!isFormValid.status">{{isFormValid.message}}</small>
     </div>

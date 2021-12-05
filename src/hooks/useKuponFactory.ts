@@ -1,8 +1,10 @@
 import { computed } from 'vue'
+import { ethers } from 'ethers'
 import { useEthers } from 'vue-dapp'
+import KuponFactory from '../abi/KuponFactory.json'
 
 export default function useKuponFactory() {
-  const { chainId } = useEthers()
+  const { chainId, signer } = useEthers()
 
   // COMPUTED
   const address = computed(function() {
@@ -13,8 +15,15 @@ export default function useKuponFactory() {
     return "0xNone"
   })
 
+  // METHODS
+  function contract() {
+    const intfc = new ethers.utils.Interface(KuponFactory.abi)
+    return new ethers.Contract(address.value, intfc, signer.value)
+  }
+
   // RETURN
   return {
-    address
+    address,
+    contract
   }
 }
