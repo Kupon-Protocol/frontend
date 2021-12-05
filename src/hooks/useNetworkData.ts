@@ -8,6 +8,8 @@ export default function useNetworkData() {
   const supportedNetworkName = computed(function() {
     if (chainId.value == 80001) {
       return "Mumbai Testnet"
+    } else if (chainId.value == 31337) {
+      return "Localhost"
     }
 
     return "Unsupported network"
@@ -15,6 +17,8 @@ export default function useNetworkData() {
 
   const isNetworkSupported = computed(function() {
     if (chainId.value == 80001) { // mumbai testnet
+      return true
+    } else if (chainId.value == 31337) { // localhost
       return true
     }
 
