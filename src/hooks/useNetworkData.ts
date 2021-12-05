@@ -7,7 +7,9 @@ export default function useNetworkData() {
   // COMPUTED
   const supportedNetworkName = computed(function() {
     if (chainId.value == 80001) {
-      return "Mumbai Testnet"
+      return "Mumbai"
+    } else if (chainId.value == 3) {
+      return "Ropsten"
     } else if (chainId.value == 31337) {
       return "Localhost"
     }
@@ -17,6 +19,8 @@ export default function useNetworkData() {
 
   const isNetworkSupported = computed(function() {
     if (chainId.value == 80001) { // mumbai testnet
+      return true
+    } else if (chainId.value == 3) { // Ropsten testnet
       return true
     } else if (chainId.value == 31337) { // localhost
       return true
