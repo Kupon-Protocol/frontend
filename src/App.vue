@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted } from "vue"
 import LayoutHeader from './components/LayoutHeader.vue'
 import { useEthers, useWallet } from 'vue-dapp'
 

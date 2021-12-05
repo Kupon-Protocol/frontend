@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watch } from "vue";
+import { watch } from "vue"
 import { useBoard, useEthers, useWallet, shortenAddress } from 'vue-dapp'
 import { useRouter } from 'vue-router'
 
@@ -13,7 +13,7 @@ function goToCreateNft() {
   router.push({name: 'CreateNft'})
 }
 
-// WATCH
+// WATCHERS
 watch(isActivated, (val: any) => {
   // store to local storage in order to enable automated connection on the next visit
   if (val && walletName.value == "metamask") {
