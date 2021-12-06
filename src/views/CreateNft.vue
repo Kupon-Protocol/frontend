@@ -13,6 +13,7 @@ const nftDescription = ref("")
 const nftImage = ref("")
 const nftMaxSupply = ref(10)
 const nftPrice = ref(0)
+const sending = ref(false)
 
 // COMPUTED
 const isFormValid = computed(function() {
@@ -39,7 +40,7 @@ const isFormValid = computed(function() {
 
 // METHODS
 function issueNft() {
-  console.log("issue nft")
+  sending.value = true
 
   try {
     factoryContract().createKuponNft(
@@ -60,16 +61,20 @@ function issueNft() {
           console.log("Failed")
         }
 
+        sending.value = false
+
         return true;
       }, (error: any) => {
         return error.checkCall().then((error: any) => {
           console.log("Error message:", error)
+          sending.value = false
           return false
         });
       }
     )});
   
   } catch(e) {
+    sending.value = false
     console.log(e)
   }
 }
@@ -115,7 +120,10 @@ function issueNft() {
           class="form-control" id="nftPrice">
       </div>
 
-      <button type="submit" @click="issueNft" class="btn btn-primary" :disabled="!isFormValid.status">Submit</button>
+      <button type="submit" @click="issueNft" class="btn btn-primary" :disabled="!isFormValid.status || sending">
+        <span v-if="sending" class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+        Submit
+      </button>
 
       <br>
       <small v-if="!isFormValid.status">{{isFormValid.message}}</small>

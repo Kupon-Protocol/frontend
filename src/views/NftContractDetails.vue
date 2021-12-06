@@ -5,18 +5,19 @@ import { ethers } from "ethers"
 import useKuponNft from "../hooks/useKuponNft" 
 
 const { address: userAddress, balance, chainId } = useEthers()
+const { contract } = useKuponNft()
 
 // PROPS
 const props = defineProps({nftAddress: String})
 
 // DATA
-const { contract } = useKuponNft()
 const nftName = ref("")
 const nftDescription = ref("")
 const nftImage = ref("")
 const nftSupply = ref(0)
 const nftMinted = ref(0)
 const nftPriceWei = ref(0)
+const sending = ref(false)
 
 // ON CREATE
 onMounted(async () => {
@@ -25,7 +26,7 @@ onMounted(async () => {
     nftDescription.value = await contract(props.nftAddress).description()
     nftImage.value = await contract(props.nftAddress).image()
     nftSupply.value = await contract(props.nftAddress).maxSupply()
-    nftMinted.value = await contract(props.nftAddress).totalMinted()
+    fetchTotalMinted()
     nftPriceWei.value = await contract(props.nftAddress).price()
   }
 });
@@ -44,6 +45,45 @@ const nftPrice: any = computed(function() {
 
   return String(ethers.utils.formatEther(String(nftPriceWei.value))) + " " + currency
 })
+
+// METHODS
+async function fetchTotalMinted() {
+  nftMinted.value = await contract(props.nftAddress).totalMinted()
+}
+
+function mintNft() {
+  sending.value = true
+
+  try {
+    contract(props.nftAddress).mint(userAddress.value).then((tx: any) => {
+      return tx.wait().then((receipt: any) => {
+        console.log("receipt status: " + receipt.status)
+        console.log(receipt)
+
+        if (receipt.status == 1) {
+          console.log("Success")
+          fetchTotalMinted()
+        } else {
+          console.log("Failed")
+        }
+
+        sending.value = false
+
+        return true;
+      }, (error: any) => {
+        return error.checkCall().then((error: any) => {
+          console.log("Error message:", error)
+          sending.value = false
+          return false
+        });
+      }
+    )});
+  
+  } catch(e) {
+    sending.value = false
+    console.log(e)
+  }
+}
 </script>
 
 <template>
@@ -74,7 +114,12 @@ const nftPrice: any = computed(function() {
 
       <h5 class="mt-4">Price: {{nftPrice}}</h5>
 
-      <button class="btn btn-success mt-4" disabled>Mint NFT</button>
+      <button v-if="Number(nftMinted) < Number(nftSupply)" @click="mintNft" class="btn btn-success mt-4" :disabled="sending">
+        <span v-if="sending" class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+        Mint NFT
+      </button>
+
+      <button v-if="Number(nftMinted) >= Number(nftSupply)" class="btn btn-secondary" disabled>SOLD OUT!</button>
     </div>
   </div>
 </template>
