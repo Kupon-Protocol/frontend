@@ -9,11 +9,11 @@ export default function useKuponFactory() {
   // COMPUTED
   const address = computed(function() {
     if (chainId.value == 80001) { // Mumbai testnet
-      return "0xbbA4dB63DA448C124ee38EeC636b697CA9bdf9e1"
+      return "0x1f8cf0bc042308677838fB50f264992A4e783610"
     } else if (chainId.value == 3) { // Ropsten testnet
-      return "0xC6c17896fa051083324f2aD0Ed4555dC46D96E7f"
+      return "0xeA2f99fE93E5D07F61334C5Eb9c54c5D5C957a6a"
     } else if (chainId.value == 31337) { // localhost
-      return "0xC6c17896fa051083324f2aD0Ed4555dC46D96E7f"
+      return "0x63f8691b048e68E1C3d6E135aDc81291A9bb1987"
     }
 
     return "0xNone"

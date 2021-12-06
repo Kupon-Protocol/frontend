@@ -18,17 +18,7 @@ onMounted(() => {
 // METHODS
 async function fetchNftAddresses() {
   if (isActivated.value) {
-    const addrLength = await factoryContract().getNftAddressesLength()
-
-    nftContractAddresses.value = []
-    let tempArray = []
-
-    for (let i = 0; i < addrLength; i++) {
-      let tempAddress = await factoryContract().getNftAddressByIndex(i)
-      tempArray.push(tempAddress)
-    }
-
-    nftContractAddresses.value = tempArray
+    nftContractAddresses.value = await factoryContract().getNftAddressesArray()
   }
 }
 
