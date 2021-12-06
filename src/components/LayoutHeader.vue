@@ -2,11 +2,13 @@
 import { watch } from "vue"
 import { useBoard, useEthers, useWallet, shortenAddress } from 'vue-dapp'
 import { useRouter } from 'vue-router'
+import useNetworkData from "../hooks/useNetworkData" 
 
 const { open } = useBoard()
 const { address, isActivated } = useEthers()
 const { walletName } = useWallet()
 const router = useRouter()
+const { isNetworkSupported, supportedNetworkName } = useNetworkData()
 
 // METHODS
 function goToCreateNft() {
@@ -48,10 +50,14 @@ watch(isActivated, (val: any) => {
         </ul>
 
         <div class="d-flex">
+          <button v-if="isActivated && isNetworkSupported" class="btn btn-primary mx-1">{{ supportedNetworkName }}</button>
+          <button v-if="isActivated && !isNetworkSupported" class="btn btn-danger mx-1">{{ supportedNetworkName }}</button>
+          
+          <button v-if="isActivated" class="btn btn-secondary mx-1" disabled>{{ shortenAddress(address) }}</button>
 
-          <button v-if="isActivated" class="btn btn-outline-success">{{ shortenAddress(address) }}</button>
-          <button v-if="isActivated" @click="goToCreateNft" class="btn btn-outline-success">Create NFT</button>
-          <button v-else @click="open" class="btn btn-outline-success">Connect Wallet</button>
+          <button v-if="isActivated" @click="goToCreateNft" class="btn btn-outline-success mx-1">Create NFT</button> 
+
+          <button v-else @click="open" class="btn btn-outline-success mx-1">Connect Wallet</button>
 
         </div>
 
