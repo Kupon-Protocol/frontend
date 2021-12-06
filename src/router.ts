@@ -3,6 +3,7 @@ import Home from './views/Home.vue'
 import About from './views/About.vue'
 import CreateNft from './views/CreateNft.vue'
 import Profile from './views/Profile.vue'
+import NftContractDetails from './views/NftContractDetails.vue'
 
 // For info on using Vue Router with the Composition API, see https://next.router.vuejs.org/guide/advanced/composition-api.html
 
@@ -21,6 +22,12 @@ const routes: Array<RouteRecordRaw> = [
     path: '/create',
     name: 'CreateNft',
     component: CreateNft,
+  },
+  {
+    path: '/nft-contract/:nftAddress',
+    name: 'NftContractDetails',
+    component: NftContractDetails,
+    props: true
   },
   {
     path: '/profile',

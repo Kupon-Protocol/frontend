@@ -3,7 +3,7 @@ import { onMounted, ref, watch } from "vue"
 import { displayEther, useEthers } from 'vue-dapp'
 import useKuponFactory from "../hooks/useKuponFactory" 
 import useNetworkData from "../hooks/useNetworkData" 
-import NftCard from "../components/NftCard.vue"
+import NftContractCard from "../components/NftContractCard.vue"
 
 const { address: userAddress, balance, chainId, isActivated } = useEthers()
 const { contract: factoryContract } = useKuponFactory()
@@ -46,7 +46,7 @@ watch(chainId, function () {
 
     <div class="row mb-5">
       <div class="col-4" v-for="nftAddress in nftContractAddresses">
-        <NftCard :address="nftAddress" />
+        <NftContractCard :address="nftAddress" />
       </div>
     </div>
 
