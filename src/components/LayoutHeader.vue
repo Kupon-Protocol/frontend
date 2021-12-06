@@ -6,7 +6,7 @@ import useNetworkData from "../hooks/useNetworkData"
 
 const { open } = useBoard()
 const { address, isActivated } = useEthers()
-const { walletName } = useWallet()
+const { connect, walletName } = useWallet()
 const router = useRouter()
 const { isNetworkSupported, supportedNetworkName } = useNetworkData()
 
@@ -15,7 +15,38 @@ function goToCreateNft() {
   router.push({name: 'CreateNft'})
 }
 
+function changeNetwork(networkName: string) {
+  let method;
+  let params;
+
+  if (networkName == "ropsten") {
+    method = "wallet_switchEthereumChain"
+    params = [{ chainId: "0x3" }] 
+  } else if (networkName == "mumbai") {
+    method = "wallet_addEthereumChain"
+    params = [{ 
+      blockExplorerUrls: [ "https://mumbai.polygonscan.com" ],
+      chainId: "0x13881",
+      chainName: "Mumbai Testnet",
+      nativeCurrency: { decimals: 18, name: "Matic", symbol: "MATIC" }, 
+      rpcUrls: ["https://matic-mumbai.chainstacklabs.com"]
+    }] 
+  }
+
+  window.ethereum.request({ 
+    method: method, 
+    params: params
+  });
+}
+
 // WATCHERS
+watch(supportedNetworkName, () => {
+  // store to local storage in order to enable automated connection on the next visit
+  if (!isActivated.value && localStorage.getItem("connected") == "metamask") {
+    connect("metamask")
+  }
+})
+
 watch(isActivated, (val: any) => {
   // store to local storage in order to enable automated connection on the next visit
   if (val && walletName.value == "metamask") {
@@ -50,9 +81,17 @@ watch(isActivated, (val: any) => {
         </ul>
 
         <div class="d-flex">
-          <button v-if="isActivated && isNetworkSupported" class="btn btn-primary mx-1">{{ supportedNetworkName }}</button>
-          <button v-if="isActivated && !isNetworkSupported" class="btn btn-danger mx-1">{{ supportedNetworkName }}</button>
-          
+
+          <div class="btn-group mx-1">
+            <button v-if="isActivated && !isNetworkSupported" type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">{{ supportedNetworkName }}</button>
+            <button v-if="isActivated && isNetworkSupported" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">{{ supportedNetworkName }}</button>
+            
+            <ul class="dropdown-menu">
+              <li><span @click="changeNetwork('mumbai')" class="dropdown-item">Mumbai testnet</span></li>
+              <li><span @click="changeNetwork('ropsten')" class="dropdown-item">Ropsten testnet</span></li>
+            </ul>
+          </div>
+
           <button v-if="isActivated" class="btn btn-secondary mx-1" disabled>{{ shortenAddress(address) }}</button>
 
           <button v-if="isActivated" @click="goToCreateNft" class="btn btn-outline-success mx-1">Create NFT</button> 
