@@ -4,7 +4,7 @@ import { useEthers } from 'vue-dapp'
 import useKuponFactory from "../hooks/useKuponFactory" 
 import NftCard from "../components/NftCard.vue"
 
-const { isActivated } = useEthers()
+const { chainId, isActivated } = useEthers()
 const { contract: factoryContract } = useKuponFactory()
 
 // DATA
@@ -20,6 +20,7 @@ async function fetchNftAddresses() {
   if (isActivated.value) {
     const addrLength = await factoryContract().getNftAddressesLength()
 
+    nftContractAddresses.value = []
     let tempArray = []
 
     for (let i = 0; i < addrLength; i++) {
@@ -32,7 +33,7 @@ async function fetchNftAddresses() {
 }
 
 // WATCHERS
-watch(isActivated, function () {
+watch(chainId, function () {
   fetchNftAddresses()
 })
 </script>

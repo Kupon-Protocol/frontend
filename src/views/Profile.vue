@@ -5,7 +5,7 @@ import useKuponFactory from "../hooks/useKuponFactory"
 import useNetworkData from "../hooks/useNetworkData" 
 import NftCard from "../components/NftCard.vue"
 
-const { address: userAddress, balance, isActivated } = useEthers()
+const { address: userAddress, balance, chainId, isActivated } = useEthers()
 const { contract: factoryContract } = useKuponFactory()
 const { isNetworkSupported, supportedNetworkName } = useNetworkData()
 
@@ -19,6 +19,8 @@ onMounted(() => {
 
 // METHODS
 async function fetchNftAddresses() {
+  nftContractAddresses.value = []
+  
   if (userAddress.value) {
     nftContractAddresses.value = await factoryContract().getNftsByIssuer(userAddress.value)
   }
@@ -26,6 +28,10 @@ async function fetchNftAddresses() {
 
 // WATCHERS
 watch(userAddress, function () {
+  fetchNftAddresses()
+})
+
+watch(chainId, function () {
   fetchNftAddresses()
 })
 </script>
