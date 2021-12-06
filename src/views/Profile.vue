@@ -2,13 +2,16 @@
 import { onMounted, ref, watch } from "vue"
 import { useEthers } from 'vue-dapp'
 import useKuponFactory from "../hooks/useKuponFactory"
+import useKuponNft from "../hooks/useKuponNft" 
 import NftContractCard from "../components/NftContractCard.vue"
 
 const { address: userAddress, chainId, isActivated } = useEthers()
 const { contract: factoryContract } = useKuponFactory()
+const { contract: nftContract } = useKuponNft()
 
 // DATA
-const nftContractAddresses = ref([])
+const issuedAddresses = ref([])
+const mintedAddresses = ref([])
 
 // ON CREATE
 onMounted(() => {
@@ -17,11 +20,24 @@ onMounted(() => {
 
 // METHODS
 async function fetchNftAddresses() {
-  nftContractAddresses.value = []
+  issuedAddresses.value = []
   
   if (userAddress.value) {
-    nftContractAddresses.value = await factoryContract().getNftsByIssuer(userAddress.value)
+    issuedAddresses.value = await factoryContract().getNftsByIssuer(userAddress.value)
   }
+
+  const allNfts = await factoryContract().getNftAddressesArray()
+
+  let tempMintedAddresses = []
+  for (let nftAddress of allNfts) {
+    // TODO: fetch an array of NFT IDs instead
+    const balance = await nftContract(nftAddress).balanceOf(userAddress.value)
+
+    if (Number(balance) > 0) {
+      tempMintedAddresses.push(nftAddress)
+    }
+  }
+  mintedAddresses.value = tempMintedAddresses
 }
 
 // WATCHERS
@@ -69,11 +85,17 @@ watch(chainId, function () {
     </ul>
 
     <div class="tab-content" id="nftTabContent">
-      <div class="tab-pane fade show active" id="minted" role="tabpanel" aria-labelledby="minted-tab">...</div>
+      <div class="tab-pane fade show active" id="minted" role="tabpanel" aria-labelledby="minted-tab">
+        <div class="row mb-5 mt-3">
+          <div class="col-4" v-for="nftAddress in mintedAddresses">
+            <NftContractCard :address="nftAddress" />
+          </div>
+        </div>
+      </div>
 
       <div class="tab-pane fade" id="issued" role="tabpanel" aria-labelledby="issued-tab">
         <div class="row mb-5 mt-3">
-          <div class="col-4" v-for="nftAddress in nftContractAddresses">
+          <div class="col-4" v-for="nftAddress in issuedAddresses">
             <NftContractCard :address="nftAddress" />
           </div>
         </div>

@@ -55,7 +55,9 @@ function mintNft() {
   sending.value = true
 
   try {
-    contract(props.nftAddress).mint(userAddress.value).then((tx: any) => {
+    contract(props.nftAddress).mint(userAddress.value, {
+      value: String(nftPriceWei.value)
+    }).then((tx: any) => {
       return tx.wait().then((receipt: any) => {
         console.log("receipt status: " + receipt.status)
         console.log(receipt)
