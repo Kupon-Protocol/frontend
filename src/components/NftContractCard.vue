@@ -35,11 +35,10 @@ function goToDetails() {
 </script>
 
 <template>
-<div class="card">
-  <img :src="nftImage" @click="goToDetails" class="card-img-top">
+<div class="card card-nft">
+  <img :src="nftImage" @click="goToDetails" class="card-img-top card-nft-img">
   <div class="card-body">
-    <h5 class="card-title" @click="goToDetails">{{nftName}}</h5>
-    <p class="card-text">{{nftDescription}}</p>
+    <h5 class="card-title card-nft-title" @click="goToDetails">{{nftName}}</h5>
   </div>
 </div>
 </template>

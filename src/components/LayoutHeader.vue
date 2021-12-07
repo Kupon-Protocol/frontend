@@ -8,13 +8,18 @@ const store = inject("store")
 
 const { open } = useBoard()
 const { address, chainId, isActivated } = useEthers()
-const { connect, walletName } = useWallet()
+const { connect, disconnect, walletName } = useWallet()
 const router = useRouter()
 const { isNetworkSupported, supportedNetworkName } = useNetworkData()
 
 // METHODS
 function goToCreateNft() {
   router.push({name: 'CreateNft'})
+}
+
+function logout() {
+  localStorage.setItem("connected", null);
+  disconnect()
 }
 
 function changeNetwork(networkName: string) {
@@ -62,10 +67,10 @@ watch(address, function () {
 </script>
 
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container-fluid">
       <router-link to="/" class="navbar-brand">
-        Kupon Protocol
+        <img src="../assets/kupon-logo-transparent.png" width="84" height="84">
       </router-link>
 
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -97,11 +102,11 @@ watch(address, function () {
             </ul>
           </div>
 
-          <button v-if="isActivated" class="btn btn-secondary mx-1" disabled>{{ shortenAddress(address) }}</button>
+          <button v-if="isActivated" class="btn btn-secondary mx-1" @click="logout">{{ shortenAddress(address) }}</button>
 
-          <button v-if="isActivated" @click="goToCreateNft" class="btn btn-outline-success mx-1">Create NFT</button> 
+          <button v-if="isActivated" @click="goToCreateNft" class="btn btn-primary mx-1">Create NFT</button> 
 
-          <button v-else @click="open" class="btn btn-outline-success mx-1">Connect Wallet</button>
+          <button v-else @click="open" class="btn btn-primary mx-1">Connect Wallet</button>
 
         </div>
 
