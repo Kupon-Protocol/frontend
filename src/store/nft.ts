@@ -14,10 +14,10 @@ const getters = {
 
   getNftsByAddress(contractAddress: any) {
     return state.allNfts[contractAddress]
-  }
+  },
 
-  // TODO: getClaimsByNftAddress
-  // TODO: getCompletionsByNftAddress
+  // getClaimsByNftAddress(contractAddress: any) {},
+  // getCompletionsByNftAddress(contractAddress: any) {}
 
 }
 
@@ -26,7 +26,27 @@ const methods = {
 
   async fetchAllNfts(contractAddress: any) {
     if (isActivated.value) {
-      state.allNfts[contractAddress] = await nftContract(contractAddress).fetchAllNfts()
+      const result = await nftContract(contractAddress).fetchAllNfts()
+
+      for (let nftItem of result) {
+        console.log(nftItem.status)
+
+        switch(nftItem.status) { 
+          case 0: { 
+            console.log("Minted")
+            break; 
+          } 
+          case 1: { 
+            console.log("Claimed")
+            break; 
+          } 
+          case 2: { 
+            console.log("Completed")
+            break; 
+          } 
+        } 
+      }
+      state.allNfts[contractAddress] = JSON.parse(JSON.stringify(result))
     }
   }
 

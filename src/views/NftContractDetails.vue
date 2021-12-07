@@ -23,6 +23,7 @@ const nftClaimed = ref(0)
 const nftCompleted = ref(0)
 const userNftBalance = ref(0)
 const sending = ref(false)
+const claiming = ref(false)
 
 // ON CREATE
 onMounted(async () => {
@@ -58,6 +59,44 @@ const nftPrice: any = computed(function() {
 })
 
 // METHODS
+async function claimNftOffer() {
+  // NFT holder can claim the underlying offer by the NFT issuer
+  claiming.value = true
+
+  // get NFT IDs that current user has
+  const userNftIds = await contract(props.nftAddress).fetchNftsByHolder(userAddress.value)
+
+  try {
+    contract(props.nftAddress).claim(Number(userNftIds[0])).then((tx: any) => {
+      return tx.wait().then((receipt: any) => {
+        console.log("receipt status: " + receipt.status)
+        console.log(receipt)
+
+        if (receipt.status == 1) {
+          console.log("Success")
+          fetchUserNftBalance()
+        } else {
+          console.log("Failed")
+        }
+
+        claiming.value = false
+
+        return true;
+      }, (error: any) => {
+        return error.checkCall().then((error: any) => {
+          console.log("Error message:", error)
+          claiming.value = false
+          return false
+        });
+      }
+    )});
+  
+  } catch(e) {
+    claiming.value = false
+    console.log(e)
+  }
+}
+
 async function fetchTotalMinted() {
   nftMinted.value = await contract(props.nftAddress).totalMinted()
 }
@@ -117,10 +156,14 @@ function mintNft() {
       <p class="mt-2">{{nftDescription}}</p>
 
       <button 
-        class="btn btn-primary mb-4"
+        @click="claimNftOffer"
+        class="btn btn-primary"
         v-if="userNftBalance > 0">
+        <span v-if="claiming" class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
         Claim this offer
       </button>
+
+      <small class="mb-4">Your NFT balance: {{userNftBalance}}</small>
 
       <div class="row">
         <div class="col nft-info-box rounded">
