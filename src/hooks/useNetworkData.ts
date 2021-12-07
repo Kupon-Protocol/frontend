@@ -17,6 +17,14 @@ export default function useNetworkData() {
     return "Unsupported network"
   })
 
+  const currency = computed(function() {
+    if (chainId.value == 80001 || chainId.value == 137) {
+      return "MATIC"
+    }
+
+    return "ETH"
+  })
+
   const isNetworkSupported = computed(function() {
     if (chainId.value == 80001) { // mumbai testnet
       return true
@@ -31,6 +39,7 @@ export default function useNetworkData() {
 
   // RETURN
   return {
+    currency,
     isNetworkSupported,
     supportedNetworkName
   }

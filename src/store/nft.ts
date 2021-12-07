@@ -35,6 +35,12 @@ const methods = {
       state.claimed = 0
       state.completed = 0
 
+      // TODO: arrays
+      // - a list of current user's (holder) claimed NFTs
+      // - a list of current user's (holder) completed NFTs
+      // - a list of claims for an NFT by the current user (issuer)
+      // - a list of completions for an NFT by the current user (issuer)
+
       for (let nftItem of result) {
         switch(nftItem.status) { 
           case 0: { // Minted

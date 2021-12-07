@@ -7,7 +7,7 @@ import useNetworkData from "../hooks/useNetworkData"
 const store = inject("store")
 
 const { contract: factoryContract } = useKuponFactory()
-const { isNetworkSupported } = useNetworkData()
+const { currency, isNetworkSupported } = useNetworkData()
 
 // DATA
 const nftName = ref("")
@@ -87,16 +87,16 @@ function issueNft() {
 
 <template>
   <div class="text-center">
-    <h1>Create a Coupon or Voucher as NFT</h1>
+    <h3 class="text-center">Create a Coupon or Voucher as NFT</h3>
 
     <div class="col-md-6 offset-md-3 mt-5">
-      <div class="mb-3">
+      <div class="mb-4">
         <label for="nftTitleInput" class="form-label">NFT title</label>
         <input v-model="nftName" type="text" placeholder="20% discount on product XYZ" class="form-control" id="nftTitleInput" aria-describedby="titleHelp">
-        <div id="titleHelp" class="form-text">Short title for your offer.</div>
+        <small id="titleHelp" class="form-text">Short title for your offer.</small>
       </div>
 
-      <div class="mb-3">
+      <div class="mb-4">
         <label for="nftDescription" class="form-label">Description</label>
         <textarea 
           type="text" 
@@ -105,23 +105,26 @@ function issueNft() {
           class="form-control" id="nftDescription" rows="5"></textarea>
       </div>
 
-      <div class="mb-3">
+      <div class="mb-4">
         <label for="nftImage" class="form-label">Image URL</label>
-        <input v-model="nftImage" type="text" class="form-control" id="nftImage">
+        <input v-model="nftImage" placeholder=".jpg, .png, .gif" type="text" class="form-control" id="nftImage">
       </div>
 
-      <div class="mb-3">
+      <div class="mb-4">
         <label for="nftMaxSupply" class="form-label">Maximum amount of NFT tokens</label>
         <input v-model="nftMaxSupply" type="text" class="form-control" id="nftMaxSupply">
       </div>
 
-      <div class="mb-3">
-        <label for="nftPrice" class="form-label">Price</label>
+      <label for="nftPrice" class="form-label">Price</label>
+      <div class="input-group mb-4">
+        <span class="input-group-text" id="basic-addon1">{{currency}}</span>
         <input 
           type="text"
           v-model="nftPrice" 
           placeholder="Any price in ETH; Can be 0 for discounts and similar offers." 
-          class="form-control" id="nftPrice">
+          class="form-control" 
+          id="nftPrice"
+        >
       </div>
 
       <button type="submit" @click="issueNft" class="btn btn-primary" :disabled="!isFormValid.status || sending">
