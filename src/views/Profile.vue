@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue"
+import { inject, onMounted, ref, watch } from "vue"
 import { useEthers } from 'vue-dapp'
 import useKuponFactory from "../hooks/useKuponFactory"
 import useKuponNft from "../hooks/useKuponNft" 
@@ -8,6 +8,8 @@ import NftContractCard from "../components/NftContractCard.vue"
 const { address: userAddress, chainId, isActivated } = useEthers()
 const { contract: factoryContract } = useKuponFactory()
 const { contract: nftContract } = useKuponNft()
+
+const store = inject("store")
 
 // DATA
 const issuedAddresses = ref([])
@@ -26,10 +28,10 @@ async function fetchNftAddresses() {
     issuedAddresses.value = await factoryContract().getNftsByIssuer(userAddress.value)
   }
 
-  const allNfts = await factoryContract().getNftAddressesArray()
+  const allNftAddresses = await factoryContract().getNftAddressesArray()
 
   let tempMintedAddresses = []
-  for (let nftAddress of allNfts) {
+  for (let nftAddress of allNftAddresses) {
     // TODO: fetch an array of NFT IDs instead
     const balance = await nftContract(nftAddress).balanceOf(userAddress.value)
 

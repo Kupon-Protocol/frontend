@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { watch } from "vue"
+import { inject, watch } from "vue"
 import { useBoard, useEthers, useWallet, shortenAddress } from 'vue-dapp'
 import { useRouter } from 'vue-router'
 import useNetworkData from "../hooks/useNetworkData" 
 
+const store = inject("store")
+
 const { open } = useBoard()
-const { address, isActivated } = useEthers()
+const { address, chainId, isActivated } = useEthers()
 const { connect, walletName } = useWallet()
 const router = useRouter()
 const { isNetworkSupported, supportedNetworkName } = useNetworkData()
@@ -54,6 +56,9 @@ watch(isActivated, (val: any) => {
   }
 })
 
+watch(address, function () {
+  store.factory.methods.fetchNftContractAddresses()
+})
 </script>
 
 <template>

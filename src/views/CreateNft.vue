@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { computed, ref } from "vue"
+import { computed, inject, ref } from "vue"
 import { ethers } from "ethers"
 import useKuponFactory from "../hooks/useKuponFactory" 
 import useNetworkData from "../hooks/useNetworkData" 
+
+const store = inject("store")
 
 const { contract: factoryContract } = useKuponFactory()
 const { isNetworkSupported } = useNetworkData()
@@ -57,6 +59,8 @@ function issueNft() {
 
         if (receipt.status == 1) {
           console.log("Success")
+          // refresh NFT addresses array
+          store.factory.methods.fetchNftContractAddresses()
         } else {
           console.log("Failed")
         }

@@ -1,31 +1,8 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue"
-import { useEthers } from 'vue-dapp'
-import useKuponFactory from "../hooks/useKuponFactory" 
+import { inject } from "vue"
 import NftContractCard from "../components/NftContractCard.vue"
 
-const { chainId, isActivated } = useEthers()
-const { contract: factoryContract } = useKuponFactory()
-
-// DATA
-const nftContractAddresses = ref()
-
-// ON CREATE
-onMounted(() => {
-  fetchNftAddresses()
-});
-
-// METHODS
-async function fetchNftAddresses() {
-  if (isActivated.value) {
-    nftContractAddresses.value = await factoryContract().getNftAddressesArray()
-  }
-}
-
-// WATCHERS
-watch(chainId, function () {
-  fetchNftAddresses()
-})
+const store = inject("store")
 </script>
 
 <template>
@@ -33,7 +10,7 @@ watch(chainId, function () {
     <h1>Kupon Protocol</h1>
 
     <div class="row mb-5">
-      <div class="col-4" v-for="nftAddress in nftContractAddresses">
+      <div class="col-4" v-for="nftAddress in store.factory.state.nftContractAddresses">
         <NftContractCard :address="nftAddress" />
       </div>
     </div>

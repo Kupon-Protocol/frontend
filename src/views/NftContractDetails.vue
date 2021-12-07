@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue"
+import { computed, inject, onMounted, ref } from "vue"
 import { useEthers } from 'vue-dapp'
 import { ethers } from "ethers"
 import useKuponNft from "../hooks/useKuponNft" 
+
+const store = inject("store")
 
 const { address: userAddress, balance, chainId } = useEthers()
 const { contract } = useKuponNft()
@@ -19,6 +21,7 @@ const nftMinted = ref(0)
 const nftPriceWei = ref(0)
 const nftClaimed = ref(0)
 const nftCompleted = ref(0)
+const userNftBalance = ref(0)
 const sending = ref(false)
 
 // ON CREATE
@@ -30,8 +33,12 @@ onMounted(async () => {
     nftSupply.value = await contract(props.nftAddress).maxSupply()
     fetchTotalMinted()
     nftPriceWei.value = await contract(props.nftAddress).price()
-    nftClaimed.value = await contract(props.nftAddress).claimedCounter()
-    nftCompleted.value = await contract(props.nftAddress).completedCounter()
+    //nftClaimed.value = await contract(props.nftAddress).claimedCounter()
+    //nftCompleted.value = await contract(props.nftAddress).completedCounter()
+
+    fetchUserNftBalance()
+
+    store.nft.methods.fetchAllNfts(props.nftAddress)
   }
 });
 
@@ -55,6 +62,10 @@ async function fetchTotalMinted() {
   nftMinted.value = await contract(props.nftAddress).totalMinted()
 }
 
+async function fetchUserNftBalance() {
+  userNftBalance.value = await contract(props.nftAddress).balanceOf(userAddress.value)
+}
+
 function mintNft() {
   sending.value = true
 
@@ -69,6 +80,7 @@ function mintNft() {
         if (receipt.status == 1) {
           console.log("Success")
           fetchTotalMinted()
+          fetchUserNftBalance()
         } else {
           console.log("Failed")
         }
@@ -103,6 +115,12 @@ function mintNft() {
       <h2 class="mt-2">{{nftName}}</h2>
 
       <p class="mt-2">{{nftDescription}}</p>
+
+      <button 
+        class="btn btn-primary mb-4"
+        v-if="userNftBalance > 0">
+        Claim this offer
+      </button>
 
       <div class="row">
         <div class="col nft-info-box rounded">
