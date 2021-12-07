@@ -13,7 +13,7 @@ export default function useKuponFactory() {
     } else if (chainId.value == 3) { // Ropsten testnet
       return "0xeA2f99fE93E5D07F61334C5Eb9c54c5D5C957a6a"
     } else if (chainId.value == 31337) { // localhost
-      return "0x63f8691b048e68E1C3d6E135aDc81291A9bb1987"
+      return "0xC6c17896fa051083324f2aD0Ed4555dC46D96E7f"
     }
 
     return "0xNone"

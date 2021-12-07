@@ -17,6 +17,8 @@ const nftImage = ref("")
 const nftSupply = ref(0)
 const nftMinted = ref(0)
 const nftPriceWei = ref(0)
+const nftClaimed = ref(0)
+const nftCompleted = ref(0)
 const sending = ref(false)
 
 // ON CREATE
@@ -28,6 +30,8 @@ onMounted(async () => {
     nftSupply.value = await contract(props.nftAddress).maxSupply()
     fetchTotalMinted()
     nftPriceWei.value = await contract(props.nftAddress).price()
+    nftClaimed.value = await contract(props.nftAddress).claimedCounter()
+    nftCompleted.value = await contract(props.nftAddress).completedCounter()
   }
 });
 
@@ -109,8 +113,8 @@ function mintNft() {
 
         <div class="col nft-info-box rounded mx-2">
           <h5>Additional info</h5>
-          <p>Claims:</p>
-          <p>Completed claims:</p>
+          <p>Claims: {{nftClaimed}}</p>
+          <p>Completed claims: {{nftCompleted}}</p>
         </div>
       </div>
 
