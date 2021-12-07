@@ -19,8 +19,6 @@ const nftImage = ref("")
 const nftSupply = ref(0)
 const nftMinted = ref(0)
 const nftPriceWei = ref(0)
-const nftClaimed = ref(0)
-const nftCompleted = ref(0)
 const userNftBalance = ref(0)
 const sending = ref(false)
 const claiming = ref(false)
@@ -34,8 +32,6 @@ onMounted(async () => {
     nftSupply.value = await contract(props.nftAddress).maxSupply()
     fetchTotalMinted()
     nftPriceWei.value = await contract(props.nftAddress).price()
-    //nftClaimed.value = await contract(props.nftAddress).claimedCounter()
-    //nftCompleted.value = await contract(props.nftAddress).completedCounter()
 
     fetchUserNftBalance()
 
@@ -75,6 +71,7 @@ async function claimNftOffer() {
         if (receipt.status == 1) {
           console.log("Success")
           fetchUserNftBalance()
+          store.nft.methods.increaseClaims()
         } else {
           console.log("Failed")
         }
@@ -174,8 +171,8 @@ function mintNft() {
 
         <div class="col nft-info-box rounded mx-2">
           <h5>Additional info</h5>
-          <p>Claims: {{nftClaimed}}</p>
-          <p>Completed claims: {{nftCompleted}}</p>
+          <p>Claims: {{store.nft.state.claimed}}</p>
+          <p>Completed claims: {{store.nft.state.completed}}</p>
         </div>
       </div>
 

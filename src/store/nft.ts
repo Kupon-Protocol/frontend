@@ -6,7 +6,9 @@ const { isActivated } = useEthers()
 const { contract: nftContract } = useKuponNft()
 
 const state = reactive({
-  allNfts: {}
+  allNfts: {},
+  claimed: 0,
+  completed: 0
 })
 
 // GETTERS
@@ -14,34 +16,36 @@ const getters = {
 
   getNftsByAddress(contractAddress: any) {
     return state.allNfts[contractAddress]
-  },
-
-  // getClaimsByNftAddress(contractAddress: any) {},
-  // getCompletionsByNftAddress(contractAddress: any) {}
+  }
 
 }
 
 // METHODS
 const methods = {
 
+  increaseClaims() {
+    state.claimed++
+  },
+
   async fetchAllNfts(contractAddress: any) {
     if (isActivated.value) {
       const result = await nftContract(contractAddress).fetchAllNfts()
 
-      for (let nftItem of result) {
-        console.log(nftItem.status)
+      // reset values
+      state.claimed = 0
+      state.completed = 0
 
+      for (let nftItem of result) {
         switch(nftItem.status) { 
-          case 0: { 
-            console.log("Minted")
+          case 0: { // Minted
             break; 
           } 
-          case 1: { 
-            console.log("Claimed")
+          case 1: { // Claimed
+            state.claimed++
             break; 
           } 
-          case 2: { 
-            console.log("Completed")
+          case 2: { // Completed
+            state.completed++
             break; 
           } 
         } 
