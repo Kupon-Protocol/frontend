@@ -17,11 +17,19 @@ h3 {
   margin-top: 34px;
 }
 
+h5 {
+  color: #FFFFFF;
+}
+
 hr {
   border: 1px solid #FFFFFF;
 }
 
 label {
+  color: #FFFFFF;
+}
+
+p {
   color: #FFFFFF;
 }
 
@@ -104,4 +112,35 @@ small {
   line-height: 65px;
   letter-spacing: 0em;
   text-align: left;
+}
+
+.nav-tabs {
+  border-bottom: 1px solid #FFFFFF;
+  background-color: #131313;
+}
+
+.nav-tabs .nav-link.active {
+  background-color: #131313;
+  border: none;
+  border-bottom: 3px solid #FC4A1A;
+  color: #ffffff;
+}
+
+.nav-tabs .nav-link.active:hover {
+  background-color: #131313;
+  border: none;
+  border-bottom: 3px solid #FC4A1A;
+  color: #ffffff;
+}
+
+.nav-tabs .nav-link {
+  background-color: #131313;
+  border: none;
+  color: #ffffff;
+}
+
+.nav-tabs .nav-link:hover {
+  background-color: #131313;
+  border: none;
+  color: #FC4A1A;
 }

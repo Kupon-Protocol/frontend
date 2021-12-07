@@ -17,6 +17,10 @@ function goToCreateNft() {
   router.push({name: 'CreateNft'})
 }
 
+function goToProfile() {
+  router.push({name: 'Profile'})
+}
+
 function logout() {
   localStorage.setItem("connected", null);
   disconnect()
@@ -78,19 +82,9 @@ watch(address, function () {
       </button>
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        
 
-          <li class="nav-item">
-            <router-link class="nav-link" active-class="active" to="/profile">Profile</router-link>
-          </li>
-
-          <li class="nav-item">
-            <router-link class="nav-link" active-class="active" to="/about">About</router-link>
-          </li>
-          
-        </ul>
-
-        <div class="d-flex">
+        <div class="d-flex ms-auto">
 
           <div class="btn-group mx-1">
             <button v-if="isActivated && !isNetworkSupported" type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">{{ supportedNetworkName }}</button>
@@ -102,8 +96,16 @@ watch(address, function () {
             </ul>
           </div>
 
-          <button v-if="isActivated" class="btn btn-secondary mx-1" @click="logout">{{ shortenAddress(address) }}</button>
+          <div class="btn-group mx-1" v-if="isActivated">
+            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">{{ shortenAddress(address) }}</button>
 
+            <ul class="dropdown-menu">
+              <li><span @click="goToProfile" class="dropdown-item">Profile</span></li>
+              <li><span @click="logout" class="dropdown-item">Logout</span></li>
+            </ul>
+          </div>
+
+          
           <button v-if="isActivated" @click="goToCreateNft" class="btn btn-primary mx-1">Create NFT</button> 
 
           <button v-else @click="open" class="btn btn-primary mx-1">Connect Wallet</button>

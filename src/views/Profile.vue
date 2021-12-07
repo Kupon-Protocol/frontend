@@ -54,11 +54,9 @@ watch(chainId, function () {
 
 <template>
   <div class="text-center">
-    <h1>Profile</h1>
+    <h3 class="text-center">Profile</h3>
 
-    <p v-if="isActivated">User address: {{userAddress}}</p>
-
-    <ul class="nav nav-tabs" id="nftTab" role="tablist">
+    <ul class="nav nav-tabs mt-5" id="nftTab" role="tablist">
 
       <li class="nav-item" role="presentation">
         <button 

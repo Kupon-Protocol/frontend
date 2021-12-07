@@ -148,7 +148,7 @@ function mintNft() {
         <img class="img-fluid rounded" :src="nftImage" />
       </div>
       
-      <h2 class="mt-2">{{nftName}}</h2>
+      <h3 class="mt-2">{{nftName}}</h3>
 
       <p class="mt-2">{{nftDescription}}</p>
 
@@ -178,7 +178,7 @@ function mintNft() {
 
       <h5 class="mt-4">Price: {{nftPrice}}</h5>
 
-      <button v-if="Number(nftMinted) < Number(nftSupply)" @click="mintNft" class="btn btn-success mt-4" :disabled="sending">
+      <button v-if="Number(nftMinted) < Number(nftSupply)" @click="mintNft" class="btn btn-primary mt-4" :disabled="sending">
         <span v-if="sending" class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
         Mint NFT
       </button>
@@ -190,7 +190,7 @@ function mintNft() {
 
 <style scoped>
 .nft-info-box {
-  border: 1px solid black;
+  border: 1px solid #ffffff;
   padding-left: 50px;
   padding-right: 50px;
   padding-top: 20px;
