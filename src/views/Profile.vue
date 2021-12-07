@@ -87,7 +87,7 @@ watch(chainId, function () {
     <div class="tab-content" id="nftTabContent">
       <div class="tab-pane fade show active" id="minted" role="tabpanel" aria-labelledby="minted-tab">
         <div class="row mb-5 mt-3">
-          <div class="col-4" v-for="nftAddress in mintedAddresses">
+          <div class="col-sm-4" v-for="nftAddress in mintedAddresses">
             <NftContractCard :address="nftAddress" />
           </div>
         </div>
@@ -95,7 +95,7 @@ watch(chainId, function () {
 
       <div class="tab-pane fade" id="issued" role="tabpanel" aria-labelledby="issued-tab">
         <div class="row mb-5 mt-3">
-          <div class="col-4" v-for="nftAddress in issuedAddresses">
+          <div class="col-sm-4" v-for="nftAddress in issuedAddresses">
             <NftContractCard :address="nftAddress" />
           </div>
         </div>

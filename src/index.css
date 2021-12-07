@@ -144,3 +144,86 @@ small {
   border: none;
   color: #FC4A1A;
 }
+
+@media only screen and (max-width: 1000px) {
+  .card-nft-title {
+    font-family: Nunito;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 19px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: #FFFFFF;
+  }
+
+  .hero-card-title {
+    font-family: Nunito;
+    font-size: 30px;
+    font-style: normal;
+    line-height: 32px;
+    font-weight: 400;
+    letter-spacing: 0em;
+    text-align: left;
+  }
+}
+
+@media only screen and (max-width: 575px) {
+  .btn {
+    border-radius: 28px;
+    font-family: 'Nunito', sans-serif;
+    font-style: normal;
+    font-size: 0.9rem;
+    padding-left: 0.9rem;
+    padding-right: 0.9rem;
+  }
+
+  .card-nft-title {
+    font-family: Nunito;
+    font-size: 17px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 19px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: #FFFFFF;
+  }
+  .card-nft-img {
+    border: 0.7px solid #FFFFFF;
+    width: 100%;
+    height: 80vw;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+
+  .hero-card-title {
+    font-family: Nunito;
+    font-size: 22px;
+    font-style: normal;
+    line-height: 22px;
+    font-weight: 400;
+    letter-spacing: 0em;
+    text-align: left;
+  }
+}
+
+@media only screen and (max-width: 325px) {
+  .btn {
+    border-radius: 28px;
+    font-family: 'Nunito', sans-serif;
+    font-style: normal;
+    font-size: 0.8rem;
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
+  }
+
+  .hero-card-title {
+    font-family: Nunito;
+    font-size: 16px;
+    font-style: normal;
+    line-height: 16px;
+    font-weight: 400;
+    letter-spacing: 0em;
+    text-align: left;
+  }
+}

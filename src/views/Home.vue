@@ -21,7 +21,7 @@ const store = inject("store")
     <h3>Hot Coupons & Vouchers 🔥</h3>
 
     <div class="row mb-5 mt-3">
-      <div class="col-3" v-for="nftAddress in store.factory.state.nftContractAddresses">
+      <div class="col-sm-3" v-for="nftAddress in store.factory.state.nftContractAddresses">
         <NftContractCard :address="nftAddress" />
       </div>
     </div>
