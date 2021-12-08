@@ -40,7 +40,7 @@ onMounted(async () => {
 });
 
 // COMPUTED
-const nftPrice: any = computed(function() {
+const nftPrice = computed(function() {
   let currency: string = "ETH"
 
   if (chainId.value == 137 || chainId.value == 80001) {
@@ -52,6 +52,14 @@ const nftPrice: any = computed(function() {
   }
 
   return String(ethers.utils.formatEther(String(nftPriceWei.value))) + " " + currency
+})
+
+const userOpenClaim = computed(function() {
+  if (store.state.userClaimedNftAddresses.includes(props.nftAddress)) {
+    return true
+  }
+
+  return false
 })
 
 // METHODS
@@ -142,48 +150,64 @@ function mintNft() {
 
 <template>
   <div class="row">
-    <div class="col-md-8 offset-md-2 text-center d-flex flex-column align-items-center">
-    
-      <div class="card" style="width: 18rem;">
+
+    <div class="col-md-5">
+      <div class="card">
         <img class="img-fluid rounded" :src="nftImage" />
       </div>
-      
-      <h3 class="mt-2">{{nftName}}</h3>
+    </div>
 
+    <div class="col-md-7">
+      <h3 class="mt-2">{{nftName}}</h3>
       <p class="mt-2">{{nftDescription}}</p>
 
-      <button 
-        @click="claimNftOffer"
-        class="btn btn-primary"
-        v-if="userNftBalance > 0">
-        <span v-if="claiming" class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
-        Claim this offer
+      <button v-if="Number(nftMinted) < Number(nftSupply)" @click="mintNft" class="btn btn-primary mt-2" :disabled="sending">
+        <span v-if="sending" class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+        Mint for {{nftPrice}}
       </button>
 
-      <small class="mb-4">Your NFT balance: {{userNftBalance}}</small>
+      <button v-if="Number(nftMinted) >= Number(nftSupply)" class="btn btn-secondary mt-2" disabled>SOLD OUT!</button>
 
-      <div class="row">
-        <div class="col nft-info-box rounded">
-          <h5>Stats</h5>
-          <p>Max supply: {{nftSupply}}</p>
-          <p>Already minted: {{nftMinted}}</p>
-        </div>
+      <div v-if="userNftBalance > 0">
+        <hr>
 
-        <div class="col nft-info-box rounded mx-2">
-          <h5>Additional info</h5>
-          <p>Claims: {{store.state.claimed}}</p>
-          <p>Completed claims: {{store.state.completed}}</p>
-        </div>
+        <p class="mb-3 mt-2">Your NFT balance: {{userNftBalance}}</p>
+
+        <button 
+        @click="claimNftOffer"
+        class="btn btn-secondary"
+        v-if="userNftBalance > 0">
+          <span v-if="claiming" class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+          Claim this offer
+        </button>
+      
       </div>
 
-      <h5 class="mt-4">Price: {{nftPrice}}</h5>
+      <div v-if="userOpenClaim">
+        <hr>
 
-      <button v-if="Number(nftMinted) < Number(nftSupply)" @click="mintNft" class="btn btn-primary mt-4" :disabled="sending">
-        <span v-if="sending" class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
-        Mint NFT
-      </button>
+        <h3>Open claim!</h3>
 
-      <button v-if="Number(nftMinted) >= Number(nftSupply)" class="btn btn-secondary" disabled>SOLD OUT!</button>
+        <p>
+          You have at least one open claim on this NFT's offer. Please contact the NFT issuer and tell them what 
+          your address is.
+        </p>
+      </div>
+      
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col nft-info-box rounded">
+      <h5>Stats</h5>
+      <p>Max supply: {{nftSupply}}</p>
+      <p>Already minted: {{nftMinted}}</p>
+    </div>
+
+    <div class="col nft-info-box rounded mx-2">
+      <h5>Additional info</h5>
+      <p>Claims: {{store.state.claimed}}</p>
+      <p>Completed claims: {{store.state.completed}}</p>
     </div>
   </div>
 </template>
