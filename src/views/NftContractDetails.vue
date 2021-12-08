@@ -92,6 +92,7 @@ async function claimNftOffer() {
           console.log("Success")
           fetchUserNftBalance()
           store.methods.increaseClaims()
+          store.methods.fetchAllNfts(props.nftAddress, true) // hard reload in order to get the user's Claims array updated
         } else {
           console.log("Failed")
         }
@@ -133,7 +134,7 @@ function markCompleted(tokenId: number) {
 
         if (receipt.status == 1) {
           console.log("Success")
-          store.methods.fetchNftContractAddresses(true) // hard reload in order to get the user's Claims array updated
+          store.methods.fetchAllNfts(props.nftAddress, true) // hard reload in order to get the user's Claims array updated
         } else {
           console.log("Failed")
         }

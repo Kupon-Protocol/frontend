@@ -33,7 +33,7 @@ const methods = {
     state.claimed++
   },
 
-  async fetchAllNfts(contractAddress: any) {
+  async fetchAllNfts(contractAddress: any, removeFromClaimed=false) {
     if (isActivated.value) {
       const result = await nftContract(contractAddress).fetchAllNfts()
 
@@ -41,6 +41,14 @@ const methods = {
       state.claimed = 0
       state.completed = 0
       state.claimsArray = []
+
+      if (removeFromClaimed) {
+        // remove the NFT address from userClaimedNftAddresses array
+        const addrIndex = state.userClaimedNftAddresses.indexOf(contractAddress);
+        if (addrIndex > -1) {
+          state.userClaimedNftAddresses.splice(addrIndex, 1);
+        }
+      }
 
       // TODO: arrays
       // - a list of current user's (holder) claimed NFTs
