@@ -97,10 +97,11 @@ watch(address, function () {
           </div>
 
           <div class="btn-group mx-1" v-if="isActivated">
-            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">{{ shortenAddress(address) }}</button>
+            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Profile</button>
 
             <ul class="dropdown-menu">
-              <li><span @click="goToProfile" class="dropdown-item">Profile</span></li>
+              <li><span class="dropdown-item disabled">{{ shortenAddress(address) }}</span></li>
+              <li><span @click="goToProfile" class="dropdown-item">Go to profile</span></li>
               <li v-if="chainId==80001">
                 <a class="dropdown-item" target="_blank" href="https://faucet.polygon.technology/">Get MATIC tokens</a>
               </li>
@@ -120,3 +121,9 @@ watch(address, function () {
   </nav>
   
 </template>
+
+<style scoped>
+.dropdown-item {
+  cursor: pointer;
+}
+</style>
