@@ -14,7 +14,8 @@ const state = reactive({
   completed: 0, // completions count for a specific NFT
   claimsArray: [], // claims array (token ID and holder address) for a specific NFT
   nftContractAddresses: [],
-  userClaimedNftAddresses: []
+  userClaimedNftAddresses: [],
+  userCompletedNftAddresses: []
 })
 
 // GETTERS
@@ -64,7 +65,7 @@ const methods = {
           case 1: { // Claimed
             state.claimed++
 
-            state.claimsArray.push([Number(nftItem.tokenId), nftItem.lastHolder])
+            state.claimsArray.push([Number(nftItem.tokenId), nftItem.lastHolder]) // for claims table in Admin section
 
             if (nftItem.lastHolder == userAddress.value && !state.userClaimedNftAddresses.includes(contractAddress)) {
               state.userClaimedNftAddresses.push(contractAddress)
@@ -73,6 +74,11 @@ const methods = {
           } 
           case 2: { // Completed
             state.completed++
+
+            if (nftItem.lastHolder == userAddress.value && !state.userCompletedNftAddresses.includes(contractAddress)) {
+              state.userCompletedNftAddresses.push(contractAddress)
+            }
+
             break; 
           } 
         } 

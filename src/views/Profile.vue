@@ -91,7 +91,19 @@ watch(chainId, function () {
           type="button" 
           role="tab" 
           aria-controls="claimed" 
-          aria-selected="false">My claimed NFTs</button>
+          aria-selected="false">Offer claims</button>
+      </li>
+
+      <li class="nav-item" role="presentation">
+        <button 
+          class="nav-link" 
+          id="completed-tab" 
+          data-bs-toggle="tab" 
+          data-bs-target="#completed" 
+          type="button" 
+          role="tab" 
+          aria-controls="completed" 
+          aria-selected="false">Completed claims</button>
       </li>
 
     </ul>
@@ -117,6 +129,14 @@ watch(chainId, function () {
       <div class="tab-pane fade" id="claimed" role="tabpanel" aria-labelledby="claimed-tab">
         <div class="row mb-5 mt-3">
           <div class="col-sm-4" v-for="nftAddress in store.state.userClaimedNftAddresses">
+            <NftContractCard :address="nftAddress" />
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane fade" id="completed" role="tabpanel" aria-labelledby="completed-tab">
+        <div class="row mb-5 mt-3">
+          <div class="col-sm-4" v-for="nftAddress in store.state.userCompletedNftAddresses">
             <NftContractCard :address="nftAddress" />
           </div>
         </div>
