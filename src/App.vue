@@ -21,11 +21,11 @@ onMounted(() => {
 
 // WATCHERS
 watch(supportedNetworkName, () => {
-  store.factory.methods.fetchNftContractAddresses()
+  store.methods.fetchNftContractAddresses()
 })
 
 watch(isActivated, function () {
-  store.factory.methods.fetchNftContractAddresses()
+  store.methods.fetchNftContractAddresses(true)
 })
 </script>
 

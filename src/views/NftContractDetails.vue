@@ -35,7 +35,7 @@ onMounted(async () => {
 
     fetchUserNftBalance()
 
-    store.nft.methods.fetchAllNfts(props.nftAddress)
+    store.methods.fetchAllNfts(props.nftAddress)
   }
 });
 
@@ -71,7 +71,7 @@ async function claimNftOffer() {
         if (receipt.status == 1) {
           console.log("Success")
           fetchUserNftBalance()
-          store.nft.methods.increaseClaims()
+          store.methods.increaseClaims()
         } else {
           console.log("Failed")
         }
@@ -171,8 +171,8 @@ function mintNft() {
 
         <div class="col nft-info-box rounded mx-2">
           <h5>Additional info</h5>
-          <p>Claims: {{store.nft.state.claimed}}</p>
-          <p>Completed claims: {{store.nft.state.completed}}</p>
+          <p>Claims: {{store.state.claimed}}</p>
+          <p>Completed claims: {{store.state.completed}}</p>
         </div>
       </div>
 

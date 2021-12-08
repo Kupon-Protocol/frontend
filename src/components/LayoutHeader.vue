@@ -66,7 +66,7 @@ watch(isActivated, (val: any) => {
 })
 
 watch(address, function () {
-  store.factory.methods.fetchNftContractAddresses()
+  store.methods.fetchNftContractAddresses()
 })
 </script>
 

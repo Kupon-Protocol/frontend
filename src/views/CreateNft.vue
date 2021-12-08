@@ -60,7 +60,7 @@ function issueNft() {
         if (receipt.status == 1) {
           console.log("Success")
           // refresh NFT addresses array
-          store.factory.methods.fetchNftContractAddresses()
+          store.methods.fetchNftContractAddresses()
         } else {
           console.log("Failed")
         }

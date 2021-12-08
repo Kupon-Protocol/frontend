@@ -82,9 +82,22 @@ watch(chainId, function () {
           aria-selected="false">My issued NFTs</button>
       </li>
 
+      <li class="nav-item" role="presentation">
+        <button 
+          class="nav-link" 
+          id="claimed-tab" 
+          data-bs-toggle="tab" 
+          data-bs-target="#claimed" 
+          type="button" 
+          role="tab" 
+          aria-controls="claimed" 
+          aria-selected="false">My claimed NFTs</button>
+      </li>
+
     </ul>
 
     <div class="tab-content" id="nftTabContent">
+
       <div class="tab-pane fade show active" id="minted" role="tabpanel" aria-labelledby="minted-tab">
         <div class="row mb-5 mt-3">
           <div class="col-sm-4" v-for="nftAddress in mintedAddresses">
@@ -100,10 +113,16 @@ watch(chainId, function () {
           </div>
         </div>
       </div>
+
+      <div class="tab-pane fade" id="claimed" role="tabpanel" aria-labelledby="claimed-tab">
+        <div class="row mb-5 mt-3">
+          <div class="col-sm-4" v-for="nftAddress in store.state.userClaimedNftAddresses">
+            <NftContractCard :address="nftAddress" />
+          </div>
+        </div>
+      </div>
+
     </div>
-
-    
-
     
   </div>
 </template>
