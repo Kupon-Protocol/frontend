@@ -21,8 +21,9 @@ const nftMinted = ref(0)
 const nftPriceWei = ref(0)
 const nftIssuer = ref()
 const userNftBalance = ref(0)
-const sending = ref(false)
+const minting = ref(false)
 const claiming = ref(false)
+const completing = ref()
 
 // ON CREATE
 onMounted(async () => {
@@ -121,8 +122,42 @@ async function fetchUserNftBalance() {
   userNftBalance.value = await contract(props.nftAddress).balanceOf(userAddress.value)
 }
 
+function markCompleted(tokenId: number) {
+  completing.value = tokenId
+
+  try {
+    contract(props.nftAddress).markCompleted(tokenId).then((tx: any) => {
+      return tx.wait().then((receipt: any) => {
+        console.log("receipt status: " + receipt.status)
+        console.log(receipt)
+
+        if (receipt.status == 1) {
+          console.log("Success")
+          store.methods.fetchNftContractAddresses(true) // hard reload in order to get the user's Claims array updated
+        } else {
+          console.log("Failed")
+        }
+
+        completing.value = null
+
+        return true;
+      }, (error: any) => {
+        return error.checkCall().then((error: any) => {
+          console.log("Error message:", error)
+          completing.value = null
+          return false
+        });
+      }
+    )});
+  
+  } catch(e) {
+    completing.value = null
+    console.log(e)
+  }
+}
+
 function mintNft() {
-  sending.value = true
+  minting.value = true
 
   try {
     contract(props.nftAddress).mint(userAddress.value, {
@@ -140,20 +175,20 @@ function mintNft() {
           console.log("Failed")
         }
 
-        sending.value = false
+        minting.value = false
 
         return true;
       }, (error: any) => {
         return error.checkCall().then((error: any) => {
           console.log("Error message:", error)
-          sending.value = false
+          minting.value = false
           return false
         });
       }
     )});
   
   } catch(e) {
-    sending.value = false
+    minting.value = false
     console.log(e)
   }
 }
@@ -172,8 +207,8 @@ function mintNft() {
       <h3 class="mt-2">{{nftName}}</h3>
       <p class="mt-2">{{nftDescription}}</p>
 
-      <button v-if="Number(nftMinted) < Number(nftSupply)" @click="mintNft" class="btn btn-primary mt-2" :disabled="sending">
-        <span v-if="sending" class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+      <button v-if="Number(nftMinted) < Number(nftSupply)" @click="mintNft" class="btn btn-primary mt-2" :disabled="minting">
+        <span v-if="minting" class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
         Mint for {{nftPrice}}
       </button>
 
@@ -185,6 +220,7 @@ function mintNft() {
         <p class="mb-3 mt-2">Your NFT balance: {{userNftBalance}}</p>
 
         <button 
+        :disabled="claiming"
         @click="claimNftOffer"
         class="btn btn-secondary"
         v-if="userNftBalance > 0">
@@ -222,7 +258,7 @@ function mintNft() {
     </div>
   </div>
 
-  <div class="row mt-4" v-if="isIssuer">
+  <div class="row mt-4" v-if="isIssuer && store.state.claimsArray.length > 0">
     <hr>
     <h3 class="text-center">Admin</h3>
 
@@ -245,7 +281,14 @@ function mintNft() {
           <th scope="row">{{claimData[0]}}</th>
           <td>{{claimData[1]}}</td>
           <td>
-            <button class="btn btn-primary btn-sm">Mark completed</button>
+            <button 
+              @click="markCompleted(claimData[0])"
+              class="btn btn-primary btn-sm"
+              :disabled="completing==claimData[0]"
+            >
+              <span v-if="completing==claimData[0]" class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+              Mark completed
+            </button>
           </td>
         </tr>
       </tbody>

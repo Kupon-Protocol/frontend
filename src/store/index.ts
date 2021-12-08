@@ -40,6 +40,7 @@ const methods = {
       // reset values
       state.claimed = 0
       state.completed = 0
+      state.claimsArray = []
 
       // TODO: arrays
       // - a list of current user's (holder) claimed NFTs
