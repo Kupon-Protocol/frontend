@@ -3,11 +3,13 @@ import { computed, inject, ref } from "vue"
 import { ethers } from "ethers"
 import useKuponFactory from "../hooks/useKuponFactory" 
 import useNetworkData from "../hooks/useNetworkData" 
+import { useToast } from "vue-toastification";
 
 const store = inject("store")
 
 const { contract: factoryContract } = useKuponFactory()
 const { currency, isNetworkSupported } = useNetworkData()
+const toast = useToast();
 
 // DATA
 const nftName = ref("")
@@ -43,6 +45,7 @@ const isFormValid = computed(function() {
 // METHODS
 function issueNft() {
   sending.value = true
+  
 
   try {
     factoryContract().createKuponNft(
@@ -59,6 +62,9 @@ function issueNft() {
 
         if (receipt.status == 1) {
           console.log("Success")
+
+          toast.success("NFT contract successfully created!");
+
           // refresh NFT addresses array
           store.methods.fetchNftContractAddresses()
         } else {
@@ -66,7 +72,6 @@ function issueNft() {
         }
 
         sending.value = false
-
         return true;
       }, (error: any) => {
         return error.checkCall().then((error: any) => {
