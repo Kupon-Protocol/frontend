@@ -16,7 +16,8 @@
     "util": "^0.12.4",
     "vue": "^3.2.16",
     "vue-dapp": "^0.4.5",
-    "vue-router": "4"
+    "vue-router": "4",
+    "vue-toastification": "^2.0.0-rc.5"
   },
   "devDependencies": {
     "@rollup/plugin-inject": "^4.0.3",
