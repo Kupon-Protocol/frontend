@@ -101,6 +101,9 @@ watch(address, function () {
 
             <ul class="dropdown-menu">
               <li><span @click="goToProfile" class="dropdown-item">Profile</span></li>
+              <li v-if="chainId==80001">
+                <a class="dropdown-item" target="_blank" href="https://faucet.polygon.technology/">Get MATIC tokens</a>
+              </li>
               <li><span @click="logout" class="dropdown-item">Logout</span></li>
             </ul>
           </div>

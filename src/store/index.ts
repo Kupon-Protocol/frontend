@@ -10,8 +10,9 @@ const { contract: nftContract } = useKuponNft()
 
 const state = reactive({
   allNfts: {},
-  claimed: 0,
-  completed: 0,
+  claimed: 0, // claims count for a specific NFT (gets reset every time NFT page is loaded)
+  completed: 0, // completions count for a specific NFT
+  claimsArray: [], // claims array (token ID and holder address) for a specific NFT
   nftContractAddresses: [],
   userClaimedNftAddresses: []
 })
@@ -53,6 +54,8 @@ const methods = {
           } 
           case 1: { // Claimed
             state.claimed++
+
+            state.claimsArray.push([Number(nftItem.tokenId), nftItem.lastHolder])
 
             if (nftItem.lastHolder == userAddress.value && !state.userClaimedNftAddresses.includes(contractAddress)) {
               state.userClaimedNftAddresses.push(contractAddress)

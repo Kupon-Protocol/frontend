@@ -19,6 +19,7 @@ const nftImage = ref("")
 const nftSupply = ref(0)
 const nftMinted = ref(0)
 const nftPriceWei = ref(0)
+const nftIssuer = ref()
 const userNftBalance = ref(0)
 const sending = ref(false)
 const claiming = ref(false)
@@ -32,6 +33,7 @@ onMounted(async () => {
     nftSupply.value = await contract(props.nftAddress).maxSupply()
     fetchTotalMinted()
     nftPriceWei.value = await contract(props.nftAddress).price()
+    nftIssuer.value = await contract(props.nftAddress).owner()
 
     fetchUserNftBalance()
 
@@ -40,6 +42,15 @@ onMounted(async () => {
 });
 
 // COMPUTED
+const isIssuer = computed(function() {
+  // is current user this NFT issuer?
+  if (nftIssuer.value == userAddress.value) {
+    return true
+  }
+
+  return false
+})
+
 const nftPrice = computed(function() {
   let currency: string = "ETH"
 
@@ -190,7 +201,7 @@ function mintNft() {
 
         <p>
           You have at least one open claim on this NFT's offer. Please contact the NFT issuer and tell them what 
-          your address is.
+          your account address is so they can verify your claim.
         </p>
       </div>
       
@@ -209,6 +220,36 @@ function mintNft() {
       <p>Claims: {{store.state.claimed}}</p>
       <p>Completed claims: {{store.state.completed}}</p>
     </div>
+  </div>
+
+  <div class="row mt-4" v-if="isIssuer">
+    <hr>
+    <h3 class="text-center">Admin</h3>
+
+    <p>
+      These NFT holders have requested the offer that the NFT promises. These NFTs are now burned 
+      and cannot be re-sold or transfered. After you provide an offer to one of these users, mark 
+      the claim as completed.
+    </p>
+
+    <table class="table text-white">
+      <thead>
+        <tr>
+          <th scope="col">Token ID</th>
+          <th scope="col">User address</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="claimData of store.state.claimsArray">
+          <th scope="row">{{claimData[0]}}</th>
+          <td>{{claimData[1]}}</td>
+          <td>
+            <button class="btn btn-primary btn-sm">Mark completed</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
