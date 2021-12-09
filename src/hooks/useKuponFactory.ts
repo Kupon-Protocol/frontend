@@ -9,7 +9,7 @@ export default function useKuponFactory() {
   // COMPUTED
   const address = computed(function() {
     if (chainId.value == 80001) { // Mumbai testnet
-      return "0x63f8691b048e68E1C3d6E135aDc81291A9bb1987"
+      return "0x3c02e28A5a5aA9eF83316F11dd79F4c8a1369793"
     } else if (chainId.value == 3) { // Ropsten testnet
       return "0x2919f0bE09549814ADF72fb0387D1981699fc6D4"
     } else if (chainId.value == 31337) { // localhost
