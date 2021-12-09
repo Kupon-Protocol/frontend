@@ -13,6 +13,7 @@ const { contract } = useKuponNft()
 const nftName = ref("")
 const nftDescription = ref("")
 const nftImage = ref("")
+const imageLoaded = ref(false)
 
 // ON CREATE
 onMounted(async () => {
@@ -36,7 +37,9 @@ function goToDetails() {
 
 <template>
 <div class="card card-nft">
-  <img :src="nftImage" @click="goToDetails" class="card-img-top card-nft-img">
+  <img v-show="imageLoaded" :src="nftImage" @load="imageLoaded=true" @click="goToDetails" class="card-img-top card-nft-img">
+  <img v-if="!imageLoaded" src="../assets/img-placeholder.jpg" @click="goToDetails" class="card-img-top card-nft-img">
+  
   <div class="card-body">
     <h5 class="card-title card-nft-title" @click="goToDetails">{{nftName}}</h5>
   </div>
