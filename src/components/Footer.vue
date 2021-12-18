@@ -8,6 +8,7 @@
     <p class="text-center">
       <a class="btn btn-icon mx-2" target="_blank" href="https://discord.gg/TjTZaCZ4wY"><i class="bi bi-discord"></i></a>
       <a class="btn btn-icon mx-2" target="_blank" href="https://github.com/Kupon-Protocol"><i class="bi bi-github"></i></a>
+      <a class="btn btn-icon mx-2" target="_blank" href="https://blog.kupon.network"><i class="bi bi-file-richtext"></i></a>
     </p>
   </div>
 </template>
